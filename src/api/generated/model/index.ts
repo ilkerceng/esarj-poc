@@ -7,7 +7,10 @@
 
 export * from './accountType';
 export * from './apiResponse';
+export * from './enums';
 export * from './listUsersParams';
+export * from './postUserBody';
 export * from './postUsersBody';
+export * from './status';
 export * from './user';
 export * from './userListItem';

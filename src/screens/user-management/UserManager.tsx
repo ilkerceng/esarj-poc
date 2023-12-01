@@ -1,11 +1,12 @@
-import { TableColumnsType, TableProps } from 'antd';
-import { AnyObject } from 'antd/es/_util/type';
-import { PropsWithChildren, ReactNode, useState } from 'react';
+import { PlusCircleFilled } from '@ant-design/icons';
+import { Badge, TableColumnsType, Typography } from 'antd';
+import { useState } from 'react';
 import { useListUsers } from '../../api/generated/esarj-api';
 import { UserListItem } from '../../api/generated/model';
 import CustomTable from '../../components/custom-table/CustomTable';
-import { Search, SearchProps } from '../../components/search/Search';
+import { Search } from '../../components/search/Search';
 import { ID } from '../../lib/types';
+import { queryClient } from '../../queryClient';
 import { UserManagementView } from './UserManagementView';
 import { UserManagementItem } from './item/UserManagementItem';
 
@@ -33,13 +34,35 @@ const columns: TableColumnsType<UserListItem> = [
   },
 ];
 
+const { Title } = Typography;
+
 export const UserManager = () => {
   const [searchText, setSearchText] = useState<string>();
-  const { data, isPending } = useListUsers({ name: searchText });
-  const [selectedUser, setSelectedUser] = useState<ID>();
+  const { data, isSuccess, isPending } = useListUsers({
+    name: searchText,
+  });
+  const [selectedUser, setSelectedUser] = useState<ID | undefined>();
 
   return (
     <UserManagementView
+      cardProps={{
+        title: (
+          <Title level={5}>
+            <span className="mr-2">Users</span>
+            {isSuccess ? (
+              <Badge count={data.length} color="#777"></Badge>
+            ) : null}
+          </Title>
+        ),
+        extra: (
+          <PlusCircleFilled
+            className="cursor-pointer"
+            onClick={() => {
+              setSelectedUser(0);
+            }}
+          />
+        ),
+      }}
       SearchComponent={
         <Search
           value={searchText}
@@ -54,11 +77,11 @@ export const UserManager = () => {
             dataSource: data || [],
             columns,
             pagination: {
-              pageSize: 6,
+              pageSize: 5,
             },
-            onRow: (record, rowIndex) => {
+            onRow: record => {
               return {
-                onClick: event => {
+                onClick: () => {
                   setSelectedUser(record.id);
                 },
                 className: 'cursor-pointer',
@@ -68,9 +91,17 @@ export const UserManager = () => {
         />
       }
       RecordDetailComponent={
-        selectedUser ? (
+        selectedUser !== undefined ? (
           <UserManagementItem
+            id={selectedUser}
+            onSuccessUpdateUser={() => {
+              setSelectedUser(undefined);
+            }}
             onClose={() => {
+              // refetch users and updated user record
+              queryClient.invalidateQueries({
+                queryKey: ['/users', `/users/${selectedUser}`],
+              });
               setSelectedUser(undefined);
             }}
           />

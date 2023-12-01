@@ -1,21 +1,16 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { StyleProvider } from '@ant-design/cssinjs';
+import { QueryClientProvider } from '@tanstack/react-query';
 import './App.css';
+import { queryClient } from './queryClient';
 import { UserManager } from './screens/user-management/UserManager';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: false,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <UserManager />
-    </QueryClientProvider>
+    <StyleProvider hashPriority="high">
+      <QueryClientProvider client={queryClient}>
+        <UserManager />
+      </QueryClientProvider>
+    </StyleProvider>
   );
 }
 

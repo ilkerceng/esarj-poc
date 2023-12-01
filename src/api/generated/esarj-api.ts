@@ -4,16 +4,24 @@
  * Swagger Esarj
  * OpenAPI spec version: 1.0.0
  */
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
   UseQueryOptions,
   UseQueryResult,
 } from '@tanstack/react-query';
-import type { ListUsersParams, User, UserListItem } from './model';
+import type {
+  Enums,
+  ListUsersParams,
+  PostUserBody,
+  User,
+  UserListItem,
+} from './model';
 import { apiClient } from '../apiClient';
-import type { ErrorType } from '../apiClient';
+import type { ErrorType, BodyType } from '../apiClient';
 
 // eslint-disable-next-line
 type SecondParameter<T extends (...args: any) => any> = T extends (
@@ -29,10 +37,9 @@ type SecondParameter<T extends (...args: any) => any> = T extends (
 export const listUsers = (
   params?: ListUsersParams,
   options?: SecondParameter<typeof apiClient>,
-  signal?: AbortSignal,
 ) => {
   return apiClient<UserListItem[]>(
-    { url: `/users`, method: 'GET', params, signal },
+    { url: `/users`, method: 'GET', params },
     options,
   );
 };
@@ -57,9 +64,8 @@ export const getListUsersQueryOptions = <
 
   const queryKey = queryOptions?.queryKey ?? getListUsersQueryKey(params);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof listUsers>>> = ({
-    signal,
-  }) => listUsers(params, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listUsers>>> = () =>
+    listUsers(params, requestOptions);
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listUsers>>,
@@ -100,42 +106,112 @@ export const useListUsers = <
 };
 
 /**
- * @summary Returns a user by ID.
+ * @summary Updates or Creates a user.
  */
-export const getUsersUserId = (
-  userId: number,
+export const postUser = (
+  postUserBody: BodyType<PostUserBody>,
   options?: SecondParameter<typeof apiClient>,
-  signal?: AbortSignal,
 ) => {
-  return apiClient<User>(
-    { url: `/users/${userId}`, method: 'GET', signal },
+  return apiClient<void>(
+    {
+      url: `/users`,
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      data: postUserBody,
+    },
     options,
   );
 };
 
-export const getGetUsersUserIdQueryKey = (userId: number) => {
+export const getPostUserMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postUser>>,
+    TError,
+    { data: BodyType<PostUserBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof apiClient>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postUser>>,
+  TError,
+  { data: BodyType<PostUserBody> },
+  TContext
+> => {
+  const { mutation: mutationOptions, request: requestOptions } = options ?? {};
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postUser>>,
+    { data: BodyType<PostUserBody> }
+  > = props => {
+    const { data } = props ?? {};
+
+    return postUser(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostUserMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postUser>>
+>;
+export type PostUserMutationBody = BodyType<PostUserBody>;
+export type PostUserMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Updates or Creates a user.
+ */
+export const usePostUser = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postUser>>,
+    TError,
+    { data: BodyType<PostUserBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof apiClient>;
+}) => {
+  const mutationOptions = getPostUserMutationOptions(options);
+
+  return useMutation(mutationOptions);
+};
+
+/**
+ * @summary Returns a user by ID.
+ */
+export const getUserById = (
+  userId: number,
+  options?: SecondParameter<typeof apiClient>,
+) => {
+  return apiClient<User>({ url: `/users/${userId}`, method: 'GET' }, options);
+};
+
+export const getGetUserByIdQueryKey = (userId: number) => {
   return [`/users/${userId}`] as const;
 };
 
-export const getGetUsersUserIdQueryOptions = <
-  TData = Awaited<ReturnType<typeof getUsersUserId>>,
+export const getGetUserByIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getUserById>>,
   TError = ErrorType<unknown>,
 >(
   userId: number,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getUsersUserId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>
     >;
     request?: SecondParameter<typeof apiClient>;
   },
 ) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getGetUsersUserIdQueryKey(userId);
+  const queryKey = queryOptions?.queryKey ?? getGetUserByIdQueryKey(userId);
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUsersUserId>>> = ({
-    signal,
-  }) => getUsersUserId(userId, requestOptions, signal);
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getUserById>>> = () =>
+    getUserById(userId, requestOptions);
 
   return {
     queryKey,
@@ -143,33 +219,95 @@ export const getGetUsersUserIdQueryOptions = <
     enabled: !!userId,
     ...queryOptions,
   } as UseQueryOptions<
-    Awaited<ReturnType<typeof getUsersUserId>>,
+    Awaited<ReturnType<typeof getUserById>>,
     TError,
     TData
   > & { queryKey: QueryKey };
 };
 
-export type GetUsersUserIdQueryResult = NonNullable<
-  Awaited<ReturnType<typeof getUsersUserId>>
+export type GetUserByIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getUserById>>
 >;
-export type GetUsersUserIdQueryError = ErrorType<unknown>;
+export type GetUserByIdQueryError = ErrorType<unknown>;
 
 /**
  * @summary Returns a user by ID.
  */
-export const useGetUsersUserId = <
-  TData = Awaited<ReturnType<typeof getUsersUserId>>,
+export const useGetUserById = <
+  TData = Awaited<ReturnType<typeof getUserById>>,
   TError = ErrorType<unknown>,
 >(
   userId: number,
   options?: {
     query?: Partial<
-      UseQueryOptions<Awaited<ReturnType<typeof getUsersUserId>>, TError, TData>
+      UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>
     >;
     request?: SecondParameter<typeof apiClient>;
   },
 ): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
-  const queryOptions = getGetUsersUserIdQueryOptions(userId, options);
+  const queryOptions = getGetUserByIdQueryOptions(userId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+};
+
+/**
+ * @summary Returns enums.
+ */
+export const getEnums = (options?: SecondParameter<typeof apiClient>) => {
+  return apiClient<Enums>({ url: `/enums`, method: 'GET' }, options);
+};
+
+export const getGetEnumsQueryKey = () => {
+  return [`/enums`] as const;
+};
+
+export const getGetEnumsQueryOptions = <
+  TData = Awaited<ReturnType<typeof getEnums>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getEnums>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof apiClient>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetEnumsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getEnums>>> = () =>
+    getEnums(requestOptions);
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getEnums>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetEnumsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getEnums>>
+>;
+export type GetEnumsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Returns enums.
+ */
+export const useGetEnums = <
+  TData = Awaited<ReturnType<typeof getEnums>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: Partial<
+    UseQueryOptions<Awaited<ReturnType<typeof getEnums>>, TError, TData>
+  >;
+  request?: SecondParameter<typeof apiClient>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } => {
+  const queryOptions = getGetEnumsQueryOptions(options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
