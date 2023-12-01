@@ -4,116 +4,114 @@
  * Swagger Esarj
  * OpenAPI spec version: 1.0.0
  */
-import { faker } from '@faker-js/faker';
 import { HttpResponse, delay, http } from 'msw';
-import { AccountType, Status } from './model';
 
 export const getListUsersMock = () => [
   {
-    id: 8379487687278592,
-    personCompany: 'Mr. Bennie Brakus',
-    status: true,
-    accountType: 'Personal',
-    customerId: '8690757',
-  },
-  {
-    id: 2785972706082816,
-    personCompany: 'contextually-based',
-    status: true,
-    accountType: 'Corporate',
-    customerId: '0182302',
-  },
-  {
-    id: 7013218207662080,
-    personCompany: 'Angie Lynch',
+    id: 2180620088246272,
+    personCompany: 'Max Wisoky',
     status: false,
-    accountType: 'Personal',
-    customerId: '0000600',
+    accountType: 1,
+    customerId: '0000215',
   },
   {
-    id: 3205950565515264,
-    personCompany: 'client-driven',
+    id: 7794705404264448,
+    personCompany: 'zero administration',
     status: true,
-    accountType: 'Corporate',
-    customerId: '0008945',
+    accountType: 2,
+    customerId: '0013172',
   },
   {
-    id: 8511480397824000,
-    personCompany: 'Ted Okuneva',
-    status: false,
-    accountType: 'Personal',
-    customerId: '1578097',
-  },
-  {
-    id: 4042485145796608,
-    personCompany: 'solution-oriented',
+    id: 6882601809739776,
+    personCompany: 'Noel Rohan',
     status: true,
-    accountType: 'Corporate',
-    customerId: '0009914',
+    accountType: 1,
+    customerId: '0016544',
   },
   {
-    id: 2073704771092480,
-    personCompany: 'Valerie Bode',
+    id: 3585177158680576,
+    personCompany: 'dynamic',
     status: false,
-    accountType: 'Personal',
-    customerId: '7719685',
+    accountType: 2,
+    customerId: '0003922',
   },
   {
-    id: 2785789224157184,
-    personCompany: 'needs-based',
-    status: false,
-    accountType: 'Corporate',
-    customerId: '0000212',
-  },
-  {
-    id: 8694094748450816,
-    personCompany: 'Traci Upton',
+    id: 6191000133304320,
+    personCompany: 'Peter Lynch-Smitham',
     status: true,
-    accountType: 'Personal',
-    customerId: '0273860',
+    accountType: 1,
+    customerId: '5425171',
   },
   {
-    id: 7507312134586368,
-    personCompany: '24 hour',
+    id: 5823930224869376,
+    personCompany: 'bi-directional',
     status: false,
-    accountType: 'Corporate',
-    customerId: '0003785',
+    accountType: 2,
+    customerId: '0008738',
+  },
+  {
+    id: 6491162082803712,
+    personCompany: 'Loretta Pouros',
+    status: false,
+    accountType: 1,
+    customerId: '0054391',
+  },
+  {
+    id: 6964655555608576,
+    personCompany: '24/7',
+    status: false,
+    accountType: 2,
+    customerId: '0090821',
+  },
+  {
+    id: 3739649566572544,
+    personCompany: 'Jacob Predovic',
+    status: false,
+    accountType: 1,
+    customerId: '0000438',
+  },
+  {
+    id: 507866989461504,
+    personCompany: 'zero administration',
+    status: false,
+    accountType: 2,
+    customerId: '0000463',
   },
 ];
 
 export const getPostUserMock = () => ({
-  id: 709651454754816,
+  id: 5112554336550912,
   status: false,
-  accountType: 'Personal',
-  customerId: '0007945',
-  userName: 'Margarita_Cartwright',
-  firstName: 'Audreanne',
-  lastName: 'Bednar',
-  email: 'Lavern.Dare85@yahoo.com',
-  mobile: '702-828-2029 x977',
+  accountType: 1,
+  customerId: '0448936',
+  userName: 'Ws330Ed2vOazQNc',
+  firstName: 'Rosie',
+  lastName: 'Kutch',
+  email: 'Rebecca.Feest@hotmail.com',
+  mobile: '551-696-9852 x9108',
 });
 
 export const getGetUserByIdMock = () => ({
-  id: 6362011975811072,
+  id: 2888840041725952,
   status: false,
-  accountType: 'Personal',
-  customerId: '0005176',
-  userName: 'Roscoe_Daugherty33',
-  firstName: 'Oceane',
-  lastName: 'Durgan',
-  email: 'Matilde_Kuhn74@gmail.com',
-  mobile: '870-757-6104 x73637',
+  accountType: 1,
+  customerId: '0001266',
+  userName: 'UIn7qC3EsWH99yYjKiy',
+  firstName: 'Dallin',
+  lastName: 'Feeney',
+  email: 'Ulices_Corwin@gmail.com',
+  mobile: '1-623-341-3206 x1276',
 });
 
 export const getGetEnumsMock = () => ({
-  accountTypes: faker.helpers.arrayElement([
-    faker.helpers.arrayElements(Object.values(AccountType)),
-    undefined,
-  ]),
-  statuses: faker.helpers.arrayElement([
-    faker.helpers.arrayElements(Object.values(Status)),
-    undefined,
-  ]),
+  accountTypes: [
+    { id: 1, label: 'Personal' },
+    { id: 2, label: 'Corporate' },
+  ],
+  statuses: [
+    { id: 1, label: 'Active' },
+    { id: 2, label: 'Passive' },
+  ],
 });
 
 export const getSwaggerEsarjMock = () => [

@@ -7,6 +7,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import type {
   MutationFunction,
+  QueryClient,
   QueryFunction,
   QueryKey,
   UseMutationOptions,
@@ -103,6 +104,29 @@ export const useListUsers = <
   query.queryKey = queryOptions.queryKey;
 
   return query;
+};
+
+/**
+ * @summary Returns a list of users.
+ */
+export const prefetchListUsers = async <
+  TData = Awaited<ReturnType<typeof listUsers>>,
+  TError = ErrorType<unknown>,
+>(
+  queryClient: QueryClient,
+  params?: ListUsersParams,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof listUsers>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiClient>;
+  },
+): Promise<QueryClient> => {
+  const queryOptions = getListUsersQueryOptions(params, options);
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
 };
 
 /**
@@ -257,6 +281,29 @@ export const useGetUserById = <
 };
 
 /**
+ * @summary Returns a user by ID.
+ */
+export const prefetchGetUserById = async <
+  TData = Awaited<ReturnType<typeof getUserById>>,
+  TError = ErrorType<unknown>,
+>(
+  queryClient: QueryClient,
+  userId: number,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getUserById>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiClient>;
+  },
+): Promise<QueryClient> => {
+  const queryOptions = getGetUserByIdQueryOptions(userId, options);
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
+};
+
+/**
  * @summary Returns enums.
  */
 export const getEnums = (options?: SecondParameter<typeof apiClient>) => {
@@ -316,4 +363,26 @@ export const useGetEnums = <
   query.queryKey = queryOptions.queryKey;
 
   return query;
+};
+
+/**
+ * @summary Returns enums.
+ */
+export const prefetchGetEnums = async <
+  TData = Awaited<ReturnType<typeof getEnums>>,
+  TError = ErrorType<unknown>,
+>(
+  queryClient: QueryClient,
+  options?: {
+    query?: Partial<
+      UseQueryOptions<Awaited<ReturnType<typeof getEnums>>, TError, TData>
+    >;
+    request?: SecondParameter<typeof apiClient>;
+  },
+): Promise<QueryClient> => {
+  const queryOptions = getGetEnumsQueryOptions(options);
+
+  await queryClient.prefetchQuery(queryOptions);
+
+  return queryClient;
 };

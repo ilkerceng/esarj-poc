@@ -13,21 +13,18 @@ import {
   notification,
 } from 'antd';
 import { useEffect, useRef, useState } from 'react';
-import { useGetUserById, usePostUser } from '../../../api/generated/esarj-api';
-import { AccountType, PostUserBody } from '../../../api/generated/model';
+import {
+  useGetEnums,
+  useGetUserById,
+  usePostUser,
+} from '../../../api/generated/esarj-api';
+import {
+  PostUserBody,
+  User
+} from '../../../api/generated/model';
 import { ID } from '../../../lib/types';
 
 type PostUserBodyType = PostUserBody;
-
-const statusOptions = [
-  { id: 1, label: 'Active' },
-  { id: 2, label: 'Passive' },
-];
-
-const accountTypeOptions = [
-  { id: AccountType.Personal, label: 'Personal' },
-  { id: AccountType.Corporate, label: 'Corporate' },
-];
 
 export enum FormPermissionMode {
   Read = 1,
@@ -37,24 +34,25 @@ export enum FormPermissionMode {
 export const UserManagementItem = ({
   id,
   onClose,
-  onSuccessUpdateUser,
-  mode,
+  onSuccessUpdateUser, // mode,
 }: {
   id: ID;
   onClose: () => void;
   onSuccessUpdateUser?: () => void;
-  mode: FormPermissionMode;
 }) => {
-  const [formPermissionMode, setFormPermissionMode] = useState(mode);
-  const {
-    data: userData,
-    refetch,
-    isFetching: isPending,
-  } = useGetUserById(id, {
-    query: { enabled: !!id },
-  });
-  const isFirstVisibleRef = useRef(true);
-  const userServerDataRef = useRef(null);
+  const { data: { accountTypes = [], statuses = [] } = {} } = useGetEnums();
+  const isNewItem = !id;
+  const [formPermissionMode, setFormPermissionMode] =
+    useState<FormPermissionMode>(
+      isNewItem ? FormPermissionMode.Edit : FormPermissionMode.Read,
+    );
+  const { data: userData, isFetching: isFetchingUserData } = useGetUserById(
+    id,
+    {
+      query: { enabled: !!id },
+    },
+  );
+  const userServerDataRef = useRef<User | null>();
 
   const [form] = Form.useForm<PostUserBodyType>();
   const { mutate: postUser, isPending: isPendingPostUser } = usePostUser({
@@ -90,37 +88,28 @@ export const UserManagementItem = ({
   // }, [form.getFieldsError()]);
 
   const onFinish = async (values: PostUserBodyType) => {
+    const formatString = (str: string) => str?.replace(/\s+/g, ' ');
     postUser({
       data: {
         ...values,
+        firstName: formatString(values.firstName),
+        lastName: formatString(values.firstName),
       },
     });
   };
 
-  const onFinishFailed = (...args) => {
-    console.log('ererrre', args);
+  const onFinishFailed = () => {
+    console.log('ererrre');
   };
-
-  // const detailsError = form.getFieldsError(['mobile']);
-  // console.log("detailsError");
-  // console.log(detailsError[0].errors);
-  console.log('refectd');
   const isFormEditable = formPermissionMode === FormPermissionMode.Edit;
-  const showSkeleton = isFirstVisibleRef.current && isPending;
-  if (showSkeleton) {
-    isFirstVisibleRef.current = false;
-  }
-
-  console.log('userData');
-  console.log(userData);
 
   return (
     <Card
-      loading={isPending}
+      loading={isFetchingUserData}
       title={
         id === 0 ? (
           'New User'
-        ) : isPending ? (
+        ) : isFetchingUserData ? (
           <Skeleton title className="mt-4" />
         ) : (
           `${userData?.firstName || ''} ${userData?.lastName || ''} `
@@ -142,7 +131,7 @@ export const UserManagementItem = ({
         layout="vertical"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        onInvalid={(...args) => {}}
+        // onInvalid={(...args) => {}}
       >
         <Tabs
           defaultActiveKey="details"
@@ -160,7 +149,7 @@ export const UserManagementItem = ({
                       rules={[{ required: true }]}
                     >
                       <Select className="" placeholder={'Select'}>
-                        {accountTypeOptions?.map(({ id, label }) => (
+                        {accountTypes?.map(({ id, label }) => (
                           <Select.Option key={id} value={id}>
                             {label}
                           </Select.Option>
@@ -172,7 +161,13 @@ export const UserManagementItem = ({
                     <Form.Item
                       name="userName"
                       label="User Name"
-                      rules={[{ required: true }]}
+                      rules={[
+                        { required: true, min: 4 },
+                        {
+                          pattern: new RegExp('^[A-Za-z0-9]+$'),
+                          message: 'only alphanumeric characters are accepted',
+                        },
+                      ]}
                     >
                       <Input placeholder={''} />
                     </Form.Item>
@@ -184,7 +179,7 @@ export const UserManagementItem = ({
                       rules={[{ required: true }]}
                     >
                       <Select className="" placeholder={'Select'}>
-                        {statusOptions?.map(({ id, label }) => (
+                        {statuses?.map(({ id, label }) => (
                           <Select.Option key={id} value={id}>
                             {label}
                           </Select.Option>
@@ -196,7 +191,7 @@ export const UserManagementItem = ({
                     <Form.Item
                       name="firstName"
                       label="First Name"
-                      rules={[{ required: true }]}
+                      rules={[{ required: true, min: 2 }]}
                     >
                       <Input placeholder={''} />
                     </Form.Item>
@@ -205,7 +200,13 @@ export const UserManagementItem = ({
                     <Form.Item
                       name="lastName"
                       label="Last Name"
-                      rules={[{ required: true }]}
+                      rules={[
+                        { required: true, min: 2 },
+                        {
+                          pattern: new RegExp('^[A-Za-z /s]+$'),
+                          message: 'only alphabetic characters are accepted',
+                        },
+                      ]}
                     >
                       <Input placeholder={''} />
                     </Form.Item>
@@ -244,7 +245,7 @@ export const UserManagementItem = ({
         <Divider />
         <Row gutter={16}>
           <Col span={12}>
-            {isFormEditable ? (
+            {isNewItem ? null : isFormEditable ? (
               <Button
                 onClick={() => {
                   setFormPermissionMode(FormPermissionMode.Read);

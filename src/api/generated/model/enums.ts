@@ -4,10 +4,10 @@
  * Swagger Esarj
  * OpenAPI spec version: 1.0.0
  */
-import type { AccountType } from './accountType';
-import type { Status } from './status';
+import type { EnumsAccountTypesItem } from './enumsAccountTypesItem';
+import type { EnumsStatusesItem } from './enumsStatusesItem';
 
 export interface Enums {
-  accountTypes?: AccountType[];
-  statuses?: Status[];
+  accountTypes?: EnumsAccountTypesItem[];
+  statuses?: EnumsStatusesItem[];
 }

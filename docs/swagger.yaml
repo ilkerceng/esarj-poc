@@ -119,11 +119,21 @@ components:
         accountTypes:
           type: array
           items:
-            $ref: '#/components/schemas/AccountType'
+            type: object
+            properties:
+              id:
+                $ref: '#/components/schemas/AccountType'
+              label:
+                type: string
         statuses:
           type: array
           items:
-            $ref: '#/components/schemas/Status'
+            type: object
+            properties:
+              id:
+                $ref: '#/components/schemas/Status'
+              label:
+                type: string
     UserListItem:
       type: object
       required:

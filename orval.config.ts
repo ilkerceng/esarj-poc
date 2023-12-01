@@ -1,7 +1,20 @@
 import { faker } from '@faker-js/faker';
 import { defineConfig } from 'orval';
 
-const AccountTypes = ['Personal', 'Corporate'];
+const accountTypes = [
+  { id: 1, label: 'Personal' },
+  { id: 2, label: 'Corporate' },
+];
+
+const statuses = [
+  { id: 1, label: 'Active' },
+  { id: 2, label: 'Passive' },
+];
+
+const enumsData = {
+  accountTypes,
+  statuses,
+};
 
 const generateCustomerId = () => {
   const idLength = 7;
@@ -19,9 +32,9 @@ const getMockUserData = (i = 0) => {
   return {
     id: faker.number.int(),
     status: faker.datatype.boolean(),
-    accountType: AccountTypes[i % 2],
+    accountType: accountTypes[i % 2].id,
     customerId: generateCustomerId(),
-    userName: faker.internet.userName(),
+    userName: faker.string.alphanumeric({ length: { min: 8, max: 20 } }),
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
@@ -33,17 +46,15 @@ const getMockUserListItemData = (i = 0) => {
   return {
     id: faker.number.int(),
     personCompany:
-      i % 2
-        ? faker.company.catchPhraseDescriptor()
-        : faker.person.fullName(),
+      i % 2 ? faker.company.catchPhraseDescriptor() : faker.person.fullName(),
     status: faker.datatype.boolean(),
-    accountType: AccountTypes[i % 2],
+    accountType: accountTypes[i % 2].id,
     customerId: generateCustomerId(),
   };
 };
 
 export default defineConfig({
-  petstore: {
+  esarj: {
     input: {
       target: './docs/swagger.yaml',
     },
@@ -52,6 +63,7 @@ export default defineConfig({
       target: 'src/api/generated/esarj-api.ts',
       schemas: 'src/api/generated/model',
       client: 'react-query',
+      clean: true,
       mock: true,
       prettier: true,
       override: {
@@ -62,8 +74,14 @@ export default defineConfig({
         query: {
           useInfiniteQueryParam: 'limit',
           signal: false,
+          usePrefetch: true,
         },
         operations: {
+          getEnums: {
+            mock: {
+              data: enumsData,
+            },
+          },
           getUserById: {
             mock: {
               data: getMockUserData(),
@@ -76,7 +94,9 @@ export default defineConfig({
           },
           listUsers: {
             mock: {
-              data: Array.from({ length: 10 }, (x, i) => getMockUserListItemData(i)),
+              data: Array.from({ length: 10 }, (x, i) =>
+                getMockUserListItemData(i),
+              ),
             },
           },
         },
