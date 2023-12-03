@@ -6,24 +6,26 @@ const leadingZerosPattern = '[^0]+';
 export const splitWithLeadingPattern = (
   value: string,
   pattern = leadingZerosPattern,
-) => {
-  const idStr = value.toString();
-  const firstNonZeroNumIndex = value.toString().search(pattern);
-  const leadingZerosStr = idStr.substring(0, firstNonZeroNumIndex);
-  const cardinalNumberStr = idStr.substring(firstNonZeroNumIndex);
+): { leadingStr: string; otherPart: string } | undefined => {
+  if (value) {
+    const idStr = value.toString();
+    const firstNonZeroNumIndex = value.toString().search(pattern);
+    const leadingStr = idStr.substring(0, firstNonZeroNumIndex);
+    const otherPart = idStr.substring(firstNonZeroNumIndex);
 
-  return { leadingZerosStr, cardinalNumberStr };
+    return { leadingStr, otherPart };
+  }
 };
 
 export const UserID = ({ id }: { id: ID }) => {
-  const { leadingZerosStr, cardinalNumberStr } = useMemo(() => {
-    return splitWithLeadingPattern(id.toString());
+  const result = useMemo(() => {
+    return splitWithLeadingPattern(id?.toString());
   }, [id]);
 
-  return (
+  return result ? (
     <>
-      <span className="opacity-20">{leadingZerosStr}</span>
-      <span>{cardinalNumberStr}</span>
+      <span className="opacity-20">{result.leadingStr}</span>
+      <span>{result.otherPart}</span>
     </>
-  );
+  ) : null;
 };
