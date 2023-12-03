@@ -5,11 +5,12 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { AccountType } from './accountType';
+import type { Status } from './status';
 
 export interface UserListItem {
   accountType: AccountType;
   customerId: number;
   id: number;
   personCompany: string;
-  status: boolean;
+  status: Status;
 }

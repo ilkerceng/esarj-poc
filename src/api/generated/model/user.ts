@@ -4,6 +4,7 @@
  * Swagger Esarj
  * OpenAPI spec version: 1.0.0
  */
+import type { Status } from './status';
 
 export interface User {
   email: string;
@@ -12,7 +13,6 @@ export interface User {
   lastName: string;
   password: string;
   phone: string;
+  status: Status;
   userName: string;
-  /** User Status */
-  userStatus: number;
 }

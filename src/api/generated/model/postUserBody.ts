@@ -5,6 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 import type { AccountType } from './accountType';
+import type { Status } from './status';
 
 export type PostUserBody = {
   accountType: AccountType;
@@ -12,6 +13,6 @@ export type PostUserBody = {
   firstName: string;
   lastName: string;
   mobile: string;
-  status: boolean;
+  status: Status;
   userName: string;
 };

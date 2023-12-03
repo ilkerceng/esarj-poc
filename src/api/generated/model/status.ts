@@ -9,6 +9,6 @@ export type Status = (typeof Status)[keyof typeof Status];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const Status = {
-  Active: 'Active',
-  Passive: 'Passive',
+  Active: 1,
+  Passive: 2,
 } as const;

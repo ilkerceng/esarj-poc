@@ -51,7 +51,7 @@ paths:
                 userName:
                   type: string
                 status:
-                  type: boolean
+                  $ref: '#/components/schemas/Status'
                 firstName:
                   type: string
                 lastName:
@@ -149,7 +149,7 @@ components:
         personCompany:
           type: string
         status:
-          type: boolean
+          $ref: '#/components/schemas/Status'
         customerId:
           type: integer
           format: int64
@@ -157,12 +157,13 @@ components:
           $ref: '#/components/schemas/AccountType'
 
     AccountType:
-      type: string
-      enum: ['Personal', 'Corporate']
-
+      type: integer
+      enum: [1, 2]
+      x-enumNames: [Personal, Corporate]
     Status:
-      type: string
-      enum: ['Active', 'Passive']
+      type: integer
+      enum: [1, 2]
+      x-enumNames: [Active, Passive]
 
     User:
       type: object
@@ -174,7 +175,7 @@ components:
         - email
         - password
         - phone
-        - userStatus
+        - status
       properties:
         id:
           type: integer
@@ -191,9 +192,7 @@ components:
           type: string
         phone:
           type: string
-        userStatus:
-          type: integer
-          format: int32
-          description: User Status
+        status:
+          $ref: '#/components/schemas/Status'
       xml:
         name: User

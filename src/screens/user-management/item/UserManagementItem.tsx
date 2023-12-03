@@ -18,10 +18,7 @@ import {
   useGetUserById,
   usePostUser,
 } from '../../../api/generated/esarj-api';
-import {
-  PostUserBody,
-  User
-} from '../../../api/generated/model';
+import { PostUserBody, User } from '../../../api/generated/model';
 import { ID } from '../../../lib/types';
 
 type PostUserBodyType = PostUserBody;
@@ -80,12 +77,6 @@ export const UserManagementItem = ({
 
     return () => {};
   }, [userData]);
-
-  // useEffect(() => {
-  //   console.log('on form changes');
-
-  //   return () => {};
-  // }, [form.getFieldsError()]);
 
   const onFinish = async (values: PostUserBodyType) => {
     const formatString = (str: string) => str?.replace(/\s+/g, ' ');
@@ -210,7 +201,7 @@ export const UserManagementItem = ({
                     >
                       <Input placeholder={''} />
                     </Form.Item>
-                  </Col>{' '}
+                  </Col>
                 </Row>
               ),
             },

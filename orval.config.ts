@@ -31,7 +31,7 @@ const generateCustomerId = () => {
 const getMockUserData = (i = 0) => {
   return {
     id: faker.number.int(),
-    status: faker.datatype.boolean(),
+    status: statuses[i % 2].id,
     accountType: accountTypes[i % 2].id,
     customerId: generateCustomerId(),
     userName: faker.string.alphanumeric({ length: { min: 8, max: 20 } }),
@@ -47,7 +47,7 @@ const getMockUserListItemData = (i = 0) => {
     id: faker.number.int(),
     personCompany:
       i % 2 ? faker.company.catchPhraseDescriptor() : faker.person.fullName(),
-    status: faker.datatype.boolean(),
+    status: statuses[i % 2].id,
     accountType: accountTypes[i % 2].id,
     customerId: generateCustomerId(),
   };

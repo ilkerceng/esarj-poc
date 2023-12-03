@@ -9,6 +9,6 @@ export type AccountType = (typeof AccountType)[keyof typeof AccountType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AccountType = {
-  Personal: 'Personal',
-  Corporate: 'Corporate',
+  Personal: 1,
+  Corporate: 2,
 } as const;

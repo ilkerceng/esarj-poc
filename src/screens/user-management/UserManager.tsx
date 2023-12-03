@@ -1,5 +1,5 @@
 import { PlusCircleFilled } from '@ant-design/icons';
-import { Badge, TableColumnsType, Typography } from 'antd';
+import { Badge, Typography } from 'antd';
 import { useState } from 'react';
 import { useListUsers } from '../../api/generated/esarj-api';
 import { UserListItem } from '../../api/generated/model';
@@ -9,30 +9,7 @@ import { ID } from '../../lib/types';
 import { queryClient } from '../../queryClient';
 import { UserManagementView } from './UserManagementView';
 import { UserManagementItem } from './item/UserManagementItem';
-
-const columns: TableColumnsType<UserListItem> = [
-  {
-    title: 'Person / Company',
-    dataIndex: 'personCompany',
-    key: 'personCompany',
-  },
-  {
-    title: 'Account Type',
-    dataIndex: 'accountType',
-    key: 'accountType',
-  },
-  {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
-    render: value => (value ? 'Active' : 'Passive'),
-  },
-  {
-    title: 'Customer Id',
-    dataIndex: 'customerId',
-    key: 'customerId',
-  },
-];
+import { columns } from './list/user-list-columns';
 
 const { Title } = Typography;
 
