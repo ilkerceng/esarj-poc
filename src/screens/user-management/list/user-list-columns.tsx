@@ -6,7 +6,7 @@ import {
 } from '../../../api/generated/model';
 import { ID } from '../../../lib/types';
 import { UserID } from '../UserId';
-import { UserStatusBadge } from '../UserStatusBadge';
+import { UserStatusBadge } from '../status/UserStatusBadge';
 import { getAccountTypeModel, getUserStatusModel } from '../utils';
 
 const PersonCompanyColumn = ({
