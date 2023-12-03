@@ -1,4 +1,4 @@
-import { Badge, TableColumnsType } from 'antd';
+import { TableColumnsType } from 'antd';
 import {
   AccountType,
   Status,
@@ -6,6 +6,7 @@ import {
 } from '../../../api/generated/model';
 import { ID } from '../../../lib/types';
 import { UserID } from '../UserId';
+import { UserStatusBadge } from '../UserStatusBadge';
 import { getAccountTypeModel, getUserStatusModel } from '../utils';
 
 const PersonCompanyColumn = ({
@@ -14,19 +15,12 @@ const PersonCompanyColumn = ({
 }: {
   name: string;
   status: Status;
-}) => {
-  const isActiveUser = Status.Active === status;
-
-  return (
-    <div>
-      <Badge
-        status={isActiveUser ? 'success' : 'error'}
-        classNames={{ indicator: '!w-[15px] !h-[15px]', root: '!mr-2' }}
-      />
-      <span>{name}</span>
-    </div>
-  );
-};
+}) => (
+  <div>
+    <UserStatusBadge status={status} />
+    <span>{name}</span>
+  </div>
+);
 
 const UserStatusColumn = ({ status }: { status: Status }) => {
   const statusModel = getUserStatusModel(status);
@@ -45,7 +39,7 @@ const AccountTypeColumn = ({ accountType }: { accountType: AccountType }) => {
 
   return accountTypeModel ? (
     <span>
-      <accountTypeModel.Icon  className="mr-2" />
+      <accountTypeModel.Icon className="mr-2" />
       {accountTypeModel?.label}
     </span>
   ) : null;

@@ -1,4 +1,4 @@
-import { CloseCircleFilled, EditFilled } from '@ant-design/icons';
+import { CloseCircleFilled, CloseOutlined, EditFilled } from '@ant-design/icons';
 import {
   Button,
   Card,
@@ -12,7 +12,7 @@ import {
   Tabs,
   notification,
 } from 'antd';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   useGetEnums,
   useGetUserById,
@@ -20,6 +20,9 @@ import {
 } from '../../../api/generated/esarj-api';
 import { PostUserBody, User } from '../../../api/generated/model';
 import { ID } from '../../../lib/types';
+import { UserStatusBadge } from '../UserStatusBadge';
+import { UserID } from '../UserId';
+import { getAccountTypeModel } from '../utils';
 
 type PostUserBodyType = PostUserBody;
 
@@ -78,6 +81,12 @@ export const UserManagementItem = ({
     return () => {};
   }, [userData]);
 
+  const accountTypeModel = useMemo(
+    () =>
+      userData?.accountType ? getAccountTypeModel(userData?.accountType) : null,
+    [userData],
+  );
+
   const onFinish = async (values: PostUserBodyType) => {
     const formatString = (str: string) => str?.replace(/\s+/g, ' ');
     postUser({
@@ -94,25 +103,51 @@ export const UserManagementItem = ({
   };
   const isFormEditable = formPermissionMode === FormPermissionMode.Edit;
 
-  return (
+  if (isFetchingUserData) {
+    return (
+      <Card loading={true} title={<Skeleton title active className="mt-4" />} />
+    );
+  }
+
+  return isNewItem || userData ? (
     <Card
-      loading={isFetchingUserData}
       title={
         id === 0 ? (
           'New User'
-        ) : isFetchingUserData ? (
-          <Skeleton title className="mt-4" />
         ) : (
-          `${userData?.firstName || ''} ${userData?.lastName || ''} `
+          <div>
+            {userData ? (
+              <>
+                {!isNewItem ? (
+                  <UserStatusBadge status={userData.status} />
+                ) : null}
+                <span>
+                  {`${userData.firstName || ''} ${userData.lastName || ''}`}
+                </span>
+              </>
+            ) : null}
+          </div>
         )
       }
       extra={
-        <Button
-          type="link"
-          shape="circle"
-          onClick={onClose}
-          icon={<CloseCircleFilled color="#aaa" />}
-        />
+        <div className="in">
+          {!isNewItem && userData ? (
+            <>
+              <span className='mr-2'>
+                <UserID id={userData.id} />
+              </span>
+              {accountTypeModel ? (
+                <accountTypeModel.Icon className="mr-2" />
+              ) : null}
+            </>
+          ) : null}
+          <Button
+            shape="circle"
+            color='#aaa'
+            onClick={onClose}
+            icon={<CloseOutlined color="red" />}
+          />
+        </div>
       }
     >
       <Form
@@ -279,5 +314,5 @@ export const UserManagementItem = ({
         </Row>
       </Form>
     </Card>
-  );
+  ) : null;
 };

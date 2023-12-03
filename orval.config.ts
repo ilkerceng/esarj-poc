@@ -16,7 +16,7 @@ const enumsData = {
   statuses,
 };
 
-const generateCustomerId = () => {
+const generateId = () => {
   const idLength = 7;
   const maxLeadingNumberOfZeros = 4;
   const idSuffix = faker.string.fromCharacters('0', {
@@ -30,10 +30,10 @@ const generateCustomerId = () => {
 
 const getMockUserData = (i = 0) => {
   return {
-    id: faker.number.int(),
+    id: generateId(),
     status: statuses[i % 2].id,
     accountType: accountTypes[i % 2].id,
-    customerId: generateCustomerId(),
+    customerId: generateId(),
     userName: faker.string.alphanumeric({ length: { min: 8, max: 20 } }),
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
@@ -49,7 +49,7 @@ const getMockUserListItemData = (i = 0) => {
       i % 2 ? faker.company.catchPhraseDescriptor() : faker.person.fullName(),
     status: statuses[i % 2].id,
     accountType: accountTypes[i % 2].id,
-    customerId: generateCustomerId(),
+    customerId: generateId(),
   };
 };
 
@@ -96,7 +96,7 @@ export default defineConfig({
             mock: {
               data: Array.from({ length: 10 }, (x, i) =>
                 getMockUserListItemData(i),
-              ),
+              ) as any,
             },
           },
         },

@@ -176,6 +176,7 @@ components:
         - password
         - phone
         - status
+        - accountType
       properties:
         id:
           type: integer
@@ -194,5 +195,8 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/Status'
+        accountType:
+          $ref: '#/components/schemas/AccountType'
+
       xml:
         name: User

@@ -21,9 +21,9 @@ export const UserID = ({ id }: { id: ID }) => {
   }, [id]);
 
   return (
-    <div>
+    <>
       <span className="opacity-20">{leadingZerosStr}</span>
       <span>{cardinalNumberStr}</span>
-    </div>
+    </>
   );
 };

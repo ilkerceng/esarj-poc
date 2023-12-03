@@ -4,9 +4,11 @@
  * Swagger Esarj
  * OpenAPI spec version: 1.0.0
  */
+import type { AccountType } from './accountType';
 import type { Status } from './status';
 
 export interface User {
+  accountType: AccountType;
   email: string;
   firstName: string;
   id: number;
