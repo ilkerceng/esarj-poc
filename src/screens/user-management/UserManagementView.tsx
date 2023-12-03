@@ -1,5 +1,7 @@
-import { Card, CardProps, Col, Row, Space } from 'antd';
+import { Card, CardProps, Col, Row, Space, Grid, Divider } from 'antd';
 import { ReactNode } from 'react';
+
+const { useBreakpoint } = Grid;
 
 export const UserManagementView = (props: {
   TableComponent: ReactNode;
@@ -9,9 +11,13 @@ export const UserManagementView = (props: {
 }) => {
   const { RecordDetailComponent, SearchComponent, TableComponent, cardProps } =
     props;
+  const screens = useBreakpoint();
+  console.log(screens);
+  const isDesktopView = screens.lg;
+
   return (
     <Row gutter={16}>
-      <Col span={RecordDetailComponent ? 10 : 24}>
+      <Col span={!isDesktopView || !RecordDetailComponent ? 24 : 10}>
         <Card {...cardProps}>
           <Space direction="vertical" className="w-full">
             {SearchComponent}
@@ -19,8 +25,9 @@ export const UserManagementView = (props: {
           </Space>
         </Card>
       </Col>
+      {!isDesktopView && <div className='mt-2 w-2' />}
       {RecordDetailComponent ? (
-        <Col span={14}>{RecordDetailComponent}</Col>
+        <Col span={isDesktopView ? 14 : 24}>{RecordDetailComponent}</Col>
       ) : null}
     </Row>
   );

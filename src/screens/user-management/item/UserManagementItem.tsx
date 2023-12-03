@@ -1,4 +1,8 @@
-import { CloseCircleFilled, CloseOutlined, EditFilled } from '@ant-design/icons';
+import {
+  CloseCircleFilled,
+  CloseOutlined,
+  EditFilled,
+} from '@ant-design/icons';
 import {
   Button,
   Card,
@@ -10,59 +14,52 @@ import {
   Select,
   Skeleton,
   Tabs,
-  notification,
 } from 'antd';
-import { useEffect, useMemo, useRef, useState } from 'react';
+
+import { useEffect, useMemo, useState } from 'react';
 import {
-  useGetEnums,
-  useGetUserById,
-  usePostUser,
-} from '../../../api/generated/esarj-api';
-import { PostUserBody, User } from '../../../api/generated/model';
+  EnumsAccountTypesItem,
+  EnumsStatusesItem,
+  User,
+} from '../../../api/generated/model';
 import { ID } from '../../../lib/types';
-import { UserStatusBadge } from '../UserStatusBadge';
 import { UserID } from '../UserId';
+import { UserStatusBadge } from '../UserStatusBadge';
 import { getAccountTypeModel } from '../utils';
-
-type PostUserBodyType = PostUserBody;
-
-export enum FormPermissionMode {
-  Read = 1,
-  Edit,
-}
+import { FormPermissionMode, PostUserBodyType } from './types';
 
 export const UserManagementItem = ({
   id,
   onClose,
-  onSuccessUpdateUser, // mode,
+  onFinish,
+  isNewItem = false,
+  userData,
+  isLoadingItem = false,
+  isPendingPostUser = false,
+  accountTypes = [],
+  statuses = [],
 }: {
   id: ID;
   onClose: () => void;
-  onSuccessUpdateUser?: () => void;
+  onFinish?: (user: PostUserBodyType) => void;
+  isNewItem?: boolean;
+  isLoadingItem?: boolean;
+  isPendingPostUser?: boolean;
+  userData?: User;
+  accountTypes: EnumsAccountTypesItem[];
+  statuses: EnumsStatusesItem[];
 }) => {
-  const { data: { accountTypes = [], statuses = [] } = {} } = useGetEnums();
-  const isNewItem = !id;
+  const [form] = Form.useForm<PostUserBodyType>();
+  const [initialUserData, setInitialUserData] = useState<User>();
+
   const [formPermissionMode, setFormPermissionMode] =
     useState<FormPermissionMode>(
       isNewItem ? FormPermissionMode.Edit : FormPermissionMode.Read,
     );
-  const { data: userData, isFetching: isFetchingUserData } = useGetUserById(
-    id,
-    {
-      query: { enabled: !!id },
-    },
-  );
-  const userServerDataRef = useRef<User | null>();
 
-  const [form] = Form.useForm<PostUserBodyType>();
-  const { mutate: postUser, isPending: isPendingPostUser } = usePostUser({
-    mutation: {
-      onSuccess: () => {
-        notification.success({ message: 'Updated Successfully' });
-        onSuccessUpdateUser?.();
-      },
-    },
-  });
+  useEffect(() => {
+    setInitialUserData(userData);
+  }, [userData]);
 
   useEffect(() => {
     if (!id) {
@@ -75,39 +72,23 @@ export const UserManagementItem = ({
     }
   }, [userData, form]);
 
-  useEffect(() => {
-    userServerDataRef.current = userData;
-
-    return () => {};
-  }, [userData]);
-
   const accountTypeModel = useMemo(
     () =>
       userData?.accountType ? getAccountTypeModel(userData?.accountType) : null,
     [userData],
   );
 
-  const onFinish = async (values: PostUserBodyType) => {
-    const formatString = (str: string) => str?.replace(/\s+/g, ' ');
-    postUser({
-      data: {
-        ...values,
-        firstName: formatString(values.firstName),
-        lastName: formatString(values.firstName),
-      },
-    });
-  };
-
   const onFinishFailed = () => {
     console.log('ererrre');
   };
-  const isFormEditable = formPermissionMode === FormPermissionMode.Edit;
 
-  if (isFetchingUserData) {
+  if (isLoadingItem) {
     return (
       <Card loading={true} title={<Skeleton title active className="mt-4" />} />
     );
   }
+
+  const isFormEditable = formPermissionMode === FormPermissionMode.Edit;
 
   return isNewItem || userData ? (
     <Card
@@ -133,7 +114,7 @@ export const UserManagementItem = ({
         <div className="in">
           {!isNewItem && userData ? (
             <>
-              <span className='mr-2'>
+              <span className="mr-2">
                 <UserID id={userData.id} />
               </span>
               {accountTypeModel ? (
@@ -143,7 +124,7 @@ export const UserManagementItem = ({
           ) : null}
           <Button
             shape="circle"
-            color='#aaa'
+            color="#aaa"
             onClick={onClose}
             icon={<CloseOutlined color="red" />}
           />
@@ -278,10 +259,10 @@ export const UserManagementItem = ({
                   if (id === 0) {
                     form.resetFields();
                   } else {
-                    form.setFieldsValue(userServerDataRef.current || {});
+                    form.setFieldsValue(initialUserData || {});
                   }
                 }}
-                disabled={isPendingPostUser}
+                disabled={isLoadingItem}
                 icon={<CloseCircleFilled />}
               >
                 Cancel

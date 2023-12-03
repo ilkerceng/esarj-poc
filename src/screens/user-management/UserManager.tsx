@@ -10,6 +10,7 @@ import { queryClient } from '../../queryClient';
 import { UserManagementView } from './UserManagementView';
 import { UserManagementItem } from './item/UserManagementItem';
 import { columns } from './list/user-list-columns';
+import { UserManagementItemContainer } from './item/UserManagementItemContainer';
 
 const { Title } = Typography;
 
@@ -69,16 +70,12 @@ export const UserManager = () => {
       }
       RecordDetailComponent={
         selectedUser !== undefined ? (
-          <UserManagementItem
+          <UserManagementItemContainer
             id={selectedUser}
             onSuccessUpdateUser={() => {
               setSelectedUser(undefined);
             }}
             onClose={() => {
-              // refetch users and updated user record
-              queryClient.invalidateQueries({
-                queryKey: ['/users', `/users/${selectedUser}`],
-              });
               setSelectedUser(undefined);
             }}
           />
