@@ -151,8 +151,7 @@ components:
         status:
           $ref: '#/components/schemas/Status'
         customerId:
-          type: integer
-          format: int64
+          type: string
         accountType:
           $ref: '#/components/schemas/AccountType'
 

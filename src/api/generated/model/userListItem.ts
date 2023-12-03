@@ -9,7 +9,7 @@ import type { Status } from './status';
 
 export interface UserListItem {
   accountType: AccountType;
-  customerId: number;
+  customerId: string;
   id: number;
   personCompany: string;
   status: Status;

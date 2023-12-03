@@ -55,23 +55,30 @@ export const columns: TableColumnsType<UserListItem> = [
     render: (value, record) => (
       <PersonCompanyColumn name={value} status={record.status} />
     ),
+    sorter: (a, b) =>
+      a.personCompany
+        .toLocaleLowerCase()
+        .localeCompare(b.personCompany.toLocaleLowerCase()),
   },
   {
     title: 'Account Type',
     dataIndex: 'accountType',
     key: 'accountType',
     render: value => <AccountTypeColumn accountType={value} />,
+    sorter: (a, b) => a.status - b.status,
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
     render: (value: Status) => <UserStatusColumn status={value} />,
+    sorter: (a, b) => a.status - b.status,
   },
   {
     title: 'Customer Id',
     dataIndex: 'customerId',
     key: 'customerId',
     render: (value: ID) => <UserIDColumn id={value} />,
+    sorter: (a, b) => parseInt(a.customerId) - parseInt(b.customerId),
   },
 ];
