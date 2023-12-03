@@ -1,4 +1,4 @@
-import { PostUserBody } from '../../../api/generated/model';
+import { PostUserBody } from '../../api/generated/model';
 
 export enum FormPermissionMode {
   Read = 1,

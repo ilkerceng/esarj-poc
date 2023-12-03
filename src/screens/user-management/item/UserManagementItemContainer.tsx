@@ -6,7 +6,7 @@ import {
 } from '../../../api/generated/esarj-api';
 import { ID } from '../../../lib/types';
 import { UserManagementItem } from './UserManagementItem';
-import { PostUserBodyType } from './types';
+import { PostUserBodyType } from '../types';
 import { queryClient } from '../../../queryClient';
 
 export const UserManagementItemContainer = ({

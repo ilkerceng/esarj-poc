@@ -26,7 +26,7 @@ import { ID } from '../../../lib/types';
 import { UserID } from '../UserId';
 import { UserStatusBadge } from '../UserStatusBadge';
 import { getAccountTypeModel } from '../utils';
-import { FormPermissionMode, PostUserBodyType } from './types';
+import { FormPermissionMode, PostUserBodyType } from '../types';
 
 export const UserManagementItem = ({
   id,
@@ -79,7 +79,7 @@ export const UserManagementItem = ({
   );
 
   const onFinishFailed = () => {
-    console.log('ererrre');
+    console.log('on finish falied');
   };
 
   if (isLoadingItem) {

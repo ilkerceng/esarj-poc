@@ -1,4 +1,4 @@
-import { Card, CardProps, Col, Row, Space, Grid, Divider } from 'antd';
+import { Card, CardProps, Col, Grid, Row, Space } from 'antd';
 import { ReactNode } from 'react';
 
 const { useBreakpoint } = Grid;

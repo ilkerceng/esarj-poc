@@ -6,11 +6,9 @@ import { UserListItem } from '../../api/generated/model';
 import CustomTable from '../../components/custom-table/CustomTable';
 import { Search } from '../../components/search/Search';
 import { ID } from '../../lib/types';
-import { queryClient } from '../../queryClient';
 import { UserManagementView } from './UserManagementView';
-import { UserManagementItem } from './item/UserManagementItem';
-import { columns } from './list/user-list-columns';
 import { UserManagementItemContainer } from './item/UserManagementItemContainer';
+import { columns } from './list/user-list-columns';
 
 const { Title } = Typography;
 
@@ -50,6 +48,7 @@ export const UserManager = () => {
       TableComponent={
         <CustomTable<UserListItem>
           {...{
+            scroll: { x: '600px' },
             rowKey: 'id',
             loading: isPending,
             dataSource: data || [],
