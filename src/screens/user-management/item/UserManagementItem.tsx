@@ -27,6 +27,7 @@ import { UserID } from '../components/user-id/UserId';
 import { UserStatusBadge } from '../components/status/UserStatusBadge';
 import { getAccountTypeModel } from '../utils';
 import { FormPermissionMode, PostUserBodyType } from '../types';
+import { EMAIL_REGEX } from '../../../lib/constants';
 
 export const UserManagementItem = ({
   id,
@@ -147,6 +148,7 @@ export const UserManagementItem = ({
             {
               key: 'details',
               label: <div>Details </div>,
+              forceRender: true,
               children: (
                 <Row gutter={16}>
                   <Col span={8}>
@@ -176,7 +178,7 @@ export const UserManagementItem = ({
                         },
                       ]}
                     >
-                      <Input placeholder={''} />
+                      <Input />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
@@ -200,7 +202,7 @@ export const UserManagementItem = ({
                       label="First Name"
                       rules={[{ required: true, min: 2 }]}
                     >
-                      <Input placeholder={''} />
+                      <Input />
                     </Form.Item>
                   </Col>
                   <Col span={8}>
@@ -215,7 +217,7 @@ export const UserManagementItem = ({
                         },
                       ]}
                     >
-                      <Input placeholder={''} />
+                      <Input />
                     </Form.Item>
                   </Col>
                 </Row>
@@ -224,24 +226,28 @@ export const UserManagementItem = ({
             {
               key: 'contact',
               label: 'Contact',
+              forceRender: true,
               children: (
                 <Row gutter={16}>
                   <Col span={12}>
                     <Form.Item
-                      name="mobile"
+                      name="phone"
                       label="Mobile"
                       rules={[{ required: true }]}
                     >
-                      <Input placeholder={''} />
+                      <Input />
                     </Form.Item>
                   </Col>
                   <Col span={12}>
                     <Form.Item
                       name="email"
                       label="Email"
-                      rules={[{ required: true }]}
+                      rules={[
+                        { required: true },
+                        { pattern: EMAIL_REGEX, message: 'email is not valid' },
+                      ]}
                     >
-                      <Input placeholder={''} />
+                      <Input />
                     </Form.Item>
                   </Col>
                 </Row>
@@ -269,7 +275,7 @@ export const UserManagementItem = ({
               </Button>
             ) : (
               <Button
-                disabled={false}
+                disabled={isPendingPostUser}
                 icon={<EditFilled />}
                 onClick={() => {
                   setFormPermissionMode(FormPermissionMode.Edit);

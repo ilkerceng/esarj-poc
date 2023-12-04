@@ -12,7 +12,7 @@ export type PostUserBody = {
   email: string;
   firstName: string;
   lastName: string;
-  mobile: string;
+  phone: string;
   status: Status;
   userName: string;
 };

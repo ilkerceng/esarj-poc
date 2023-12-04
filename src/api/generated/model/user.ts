@@ -13,7 +13,6 @@ export interface User {
   firstName: string;
   id: number;
   lastName: string;
-  password: string;
   phone: string;
   status: Status;
   userName: string;

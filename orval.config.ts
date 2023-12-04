@@ -38,7 +38,7 @@ const getMockUserData = (i = 0) => {
     firstName: faker.person.firstName(),
     lastName: faker.person.lastName(),
     email: faker.internet.email(),
-    mobile: faker.phone.number(),
+    phone: faker.helpers.replaceSymbolWithNumber('+90 (###) ### ####'),
   };
 };
 

@@ -43,7 +43,7 @@ paths:
                 - firstName
                 - lastName
                 - email
-                - mobile
+                - phone
 
               properties:
                 accountType:
@@ -58,7 +58,7 @@ paths:
                   type: string
                 email:
                   type: string
-                mobile:
+                phone:
                   type: string
       responses:
         '201':
@@ -187,8 +187,6 @@ components:
         lastName:
           type: string
         email:
-          type: string
-        password:
           type: string
         phone:
           type: string

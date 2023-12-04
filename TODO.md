@@ -1,6 +1,6 @@
 - features
   - sort by for all columns
-  - Post user
+  - input mask mobile phone number
 
 - sdlc requirements
   Stories
@@ -9,8 +9,6 @@
 extra
 Readme
 write a wrapper for table
-Mobile View
-css düzenlemeleri
 
 Bonus
 use hooks and mapper for table
