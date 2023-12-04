@@ -2,13 +2,11 @@ import { PlusCircleFilled } from '@ant-design/icons';
 import { Badge, Typography } from 'antd';
 import { useState } from 'react';
 import { useListUsers } from '../../api/generated/esarj-api';
-import { UserListItem } from '../../api/generated/model';
-import CustomTable from '../../components/custom-table/CustomTable';
 import { Search } from '../../components/search/Search';
 import { ID } from '../../lib/types';
-import { UserManagementView } from './views/UserManagementView';
 import { UserManagementItemContainer } from './item/UserManagementItemContainer';
-import { columns } from './list/columns';
+import { UserList } from './list/UserList';
+import { UserManagementView } from './views/UserManagementView';
 
 const { Title } = Typography;
 
@@ -46,25 +44,12 @@ export const UserManager = () => {
         />
       }
       TableComponent={
-        <CustomTable<UserListItem>
-          {...{
-            scroll: { x: '600px' },
-            rowKey: 'id',
-            loading: isPending,
-            dataSource: data || [],
-            columns,
-            pagination: {
-              pageSize: 5,
-            },
-            onRow: record => {
-              return {
-                onClick: () => {
-                  setSelectedUser(record.id);
-                },
-                className: 'cursor-pointer',
-              };
-            },
+        <UserList
+          onSelectUser={id => {
+            setSelectedUser(id);
           }}
+          dataSource={data}
+          loading={isPending}
         />
       }
       RecordDetailComponent={
