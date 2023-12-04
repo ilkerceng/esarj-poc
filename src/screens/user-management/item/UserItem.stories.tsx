@@ -40,19 +40,3 @@ export const ExistingUser = {
     ...commonProps,
   },
 } satisfies Story;
-
-export const UserItemLoadingState = {
-  name: 'User Item Loading State',
-  args: {
-    ...commonProps,
-    isLoadingItem: true,
-  },
-} satisfies Story;
-
-export const UserItemPostLoadingState = {
-  name: 'User Item Post Loading State',
-  args: {
-    ...commonProps,
-    isPendingPostUser: true,
-  },
-} satisfies Story;
