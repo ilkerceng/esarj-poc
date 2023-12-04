@@ -1,5 +1,5 @@
 import { Badge, BadgeProps } from 'antd';
-import { Status } from '../../../api/generated/model';
+import { Status } from '../../../../api/generated/model';
 
 type UserStatusBadgeProps = {
   status: Status;

@@ -3,16 +3,18 @@ import { ReactNode } from 'react';
 
 const { useBreakpoint } = Grid;
 
+/**
+ * Layout for search list and item detail 
+ */
 export const UserManagementView = (props: {
   TableComponent: ReactNode;
   SearchComponent: ReactNode;
-  RecordDetailComponent: ReactNode;
+  RecordDetailComponent?: ReactNode;
   cardProps: CardProps;
 }) => {
   const { RecordDetailComponent, SearchComponent, TableComponent, cardProps } =
     props;
   const screens = useBreakpoint();
-  console.log(screens);
   const isDesktopView = screens.lg;
 
   return (

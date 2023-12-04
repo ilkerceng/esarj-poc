@@ -6,9 +6,9 @@ import { UserListItem } from '../../api/generated/model';
 import CustomTable from '../../components/custom-table/CustomTable';
 import { Search } from '../../components/search/Search';
 import { ID } from '../../lib/types';
-import { UserManagementView } from './UserManagementView';
+import { UserManagementView } from './views/UserManagementView';
 import { UserManagementItemContainer } from './item/UserManagementItemContainer';
-import { columns } from './list/user-list-columns';
+import { columns } from './list/columns';
 
 const { Title } = Typography;
 

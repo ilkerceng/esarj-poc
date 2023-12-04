@@ -1,6 +1,6 @@
 import { Meta, StoryObj } from '@storybook/react';
 import { UserStatusBadge } from './UserStatusBadge';
-import { Status } from '../../../api/generated/model';
+import { Status } from '../../../../api/generated/model';
 
 const meta = {
   title: 'components/User Status',

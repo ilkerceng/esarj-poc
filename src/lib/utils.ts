@@ -1,6 +1,3 @@
-import { useMemo } from 'react';
-import { ID } from '../../lib/types';
-
 const leadingZerosPattern = '[^0]+';
 
 export const splitWithLeadingPattern = (
@@ -17,15 +14,6 @@ export const splitWithLeadingPattern = (
   }
 };
 
-export const UserID = ({ id }: { id: ID }) => {
-  const result = useMemo(() => {
-    return splitWithLeadingPattern(id?.toString());
-  }, [id]);
-
-  return result ? (
-    <>
-      <span className="opacity-20">{result.leadingStr}</span>
-      <span>{result.otherPart}</span>
-    </>
-  ) : null;
-};
+export function sum(a: number, b: number) {
+  return a + b;
+}
