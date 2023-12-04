@@ -11,3 +11,7 @@ Readme
 write a wrapper for table
 Mobile View
 css düzenlemeleri
+
+Bonus
+use hooks and mapper for table
+
