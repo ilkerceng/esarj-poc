@@ -9,6 +9,7 @@ const config: Config = {
     '^.+\\.svg$': 'jest-svg-transformer',
     '^.+\\.(css|less|scss)$': 'identity-obj-proxy',
   },
+  setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
 };
 
 export default config;

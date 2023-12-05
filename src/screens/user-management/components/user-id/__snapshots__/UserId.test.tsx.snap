@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+[
+  <span
+    className="opacity-20"
+    data-testid="leading-zeros"
+  >
+    00
+  </span>,
+  <span>
+    123
+  </span>,
+]
+`;

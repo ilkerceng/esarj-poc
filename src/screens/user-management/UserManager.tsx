@@ -55,6 +55,7 @@ export const UserManager = () => {
       RecordDetailComponent={
         selectedUser !== undefined ? (
           <UserManagementItemContainer
+            key={selectedUser}
             id={selectedUser}
             onSuccessUpdateUser={() => {
               setSelectedUser(undefined);

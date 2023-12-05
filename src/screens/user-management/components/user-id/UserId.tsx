@@ -1,9 +1,9 @@
 import { HTMLProps, useMemo } from 'react';
-import { ID } from '../../../../lib/types';
+// import { ID } from '../../../../lib/types';
 import { splitWithLeadingPattern } from '../../../../lib/utils';
 
 type UserIDProps = {
-  id: ID;
+  id: string;
   leadingZerosContainerProps?: HTMLProps<HTMLSpanElement>;
   numericIdContainerProps?: HTMLProps<HTMLSpanElement>;
 };
@@ -22,10 +22,12 @@ export const UserID = ({
 
   return result ? (
     <>
-      <span className="opacity-20" {...leadingZerosContainerProps}>
-        {result.leadingStr}
-      </span>
-      <span {...numericIdContainerProps} >{result.otherPart}</span>
+      {result.leadingStr ? (
+        <span data-testid="leading-zeros" className="opacity-20" {...leadingZerosContainerProps}>
+          {result.leadingStr}
+        </span>
+      ) : null}
+      <span {...numericIdContainerProps}>{result.otherPart}</span>
     </>
   ) : null;
 };

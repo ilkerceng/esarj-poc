@@ -12,4 +12,6 @@ write a wrapper for table
 
 Bonus
 use hooks and mapper for table
+solve id
+
 

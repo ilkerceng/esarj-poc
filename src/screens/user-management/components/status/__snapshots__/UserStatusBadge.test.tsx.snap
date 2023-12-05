@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders correctly 1`] = `
+<span
+  className="ant-badge ant-badge-status ant-badge-not-a-wrapper !mr-2 css-dev-only-do-not-override-2q8sxy"
+  style={{}}
+>
+  <span
+    className="!w-[15px] !h-[15px] ant-badge-status-dot ant-badge-status-success"
+    style={{}}
+  />
+</span>
+`;
