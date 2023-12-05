@@ -2,6 +2,7 @@ import {
   CloseCircleFilled,
   CloseOutlined,
   EditFilled,
+  InfoCircleOutlined,
 } from '@ant-design/icons';
 import {
   Button,
@@ -15,6 +16,7 @@ import {
   Skeleton,
   Tabs,
 } from 'antd';
+import { ValidateErrorEntity } from 'rc-field-form/es/interface';
 
 import { useEffect, useMemo, useState } from 'react';
 import {
@@ -22,12 +24,26 @@ import {
   EnumsStatusesItem,
   User,
 } from '../../../api/generated/model';
-import { ID } from '../../../lib/types';
-import { UserID } from '../components/user-id/UserId';
-import { UserStatusBadge } from '../components/status/UserStatusBadge';
-import { getAccountTypeModel } from '../utils';
-import { FormPermissionMode, PostUserBodyType } from '../types';
 import { EMAIL_REGEX } from '../../../lib/constants';
+import { ID } from '../../../lib/types';
+import { UserStatusBadge } from '../components/status/UserStatusBadge';
+import { UserID } from '../components/user-id/UserId';
+import { FormPermissionMode, PostUserBodyType } from '../types';
+import { getAccountTypeModel } from '../utils';
+
+type ActiveTabKey = 'details' | 'contact';
+type TabErrorStateType = Record<ActiveTabKey, boolean>;
+const contactTabFormNamesMap: Record<keyof PostUserBodyType, ActiveTabKey> = {
+  phone: 'contact',
+  email: 'contact',
+  accountType: 'details',
+  firstName: 'details',
+  lastName: 'details',
+  status: 'details',
+  userName: 'details',
+};
+
+const initialErrorTabState = {} as TabErrorStateType;
 
 export const UserManagementItem = ({
   id,
@@ -52,11 +68,11 @@ export const UserManagementItem = ({
 }) => {
   const [form] = Form.useForm<PostUserBodyType>();
   const [initialUserData, setInitialUserData] = useState<User>();
-
+  const [activeTab, setActiveTab] = useState<ActiveTabKey>('details');
+  const [errorTab, setErrorTab] =
+    useState<TabErrorStateType>(initialErrorTabState);
   const [formPermissionMode, setFormPermissionMode] =
-    useState<FormPermissionMode>(
-      isNewItem ? FormPermissionMode.Edit : FormPermissionMode.Read,
-    );
+    useState<FormPermissionMode>();
 
   useEffect(() => {
     setInitialUserData(userData);
@@ -79,8 +95,41 @@ export const UserManagementItem = ({
     [userData],
   );
 
-  const onFinishFailed = () => {
-    console.log('on finish falied');
+  const setErrorIndicator = (errorFieldNames: string[]) => {
+    if (!errorFieldNames.length) {
+      setErrorTab(initialErrorTabState);
+    } else {
+      const tabErrorState: Record<ActiveTabKey, boolean> = {
+        contact: false,
+        details: false,
+      };
+      errorFieldNames.forEach(name => {
+        tabErrorState[
+          contactTabFormNamesMap[name as keyof typeof contactTabFormNamesMap]
+        ] = true;
+      });
+      setErrorTab(tabErrorState);
+    }
+  };
+
+  const getErrors = () => {
+    return form
+      .getFieldsError()
+      .filter(item => item.errors.length)
+      .map(errorField => errorField.name?.[0]) as string[];
+  };
+
+  useEffect(() => {
+    setErrorIndicator(getErrors());
+  }, [activeTab]);
+
+  const onFinishFailed = async (
+    errorInfo: ValidateErrorEntity<PostUserBodyType>,
+  ) => {
+    const errorFieldNames = errorInfo.errorFields.map(
+      errorField => errorField.name[0],
+    );
+    setErrorIndicator(errorFieldNames as string[]);
   };
 
   if (isLoadingItem) {
@@ -89,9 +138,30 @@ export const UserManagementItem = ({
     );
   }
 
+  const onChangeTab = (activeKey: ActiveTabKey) => {
+    setActiveTab(activeKey);
+  };
+
+  const RenderTabTitleWithErrorState = ({
+    tabKey,
+    label,
+  }: {
+    tabKey: ActiveTabKey;
+    label: string;
+  }) => {
+    return (
+      <span>
+        {label}
+        {errorTab[tabKey] && activeTab !== tabKey ? (
+          <InfoCircleOutlined style={{color: "red"}} />
+        ) : null}
+      </span>
+    );
+  };
+
   const isFormEditable = formPermissionMode === FormPermissionMode.Edit;
 
-  return isNewItem || userData ? (
+  return (
     <Card
       title={
         id === 0 ? (
@@ -134,20 +204,28 @@ export const UserManagementItem = ({
     >
       <Form
         form={form}
-        disabled={!isFormEditable}
+        disabled={!isFormEditable && !isNewItem}
         className="w-full"
         layout="vertical"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        // onInvalid={(...args) => {}}
       >
         <Tabs
-          defaultActiveKey="details"
+          activeKey={activeTab}
+          onChange={activeKey => {
+            onChangeTab(activeKey as ActiveTabKey);
+          }}
           destroyInactiveTabPane={false}
           items={[
             {
               key: 'details',
-              label: <div>Details </div>,
+              tabKey: 'details',
+              label: (
+                <RenderTabTitleWithErrorState
+                  label="Details"
+                  tabKey="details"
+                />
+              ),
               forceRender: true,
               children: (
                 <Row gutter={16}>
@@ -225,7 +303,13 @@ export const UserManagementItem = ({
             },
             {
               key: 'contact',
-              label: 'Contact',
+              tabKey: 'contact',
+              label: (
+                <RenderTabTitleWithErrorState
+                  label="Contact"
+                  tabKey="contact"
+                />
+              ),
               forceRender: true,
               children: (
                 <Row gutter={16}>
@@ -301,5 +385,5 @@ export const UserManagementItem = ({
         </Row>
       </Form>
     </Card>
-  ) : null;
+  );
 };
