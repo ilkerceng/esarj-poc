@@ -11,13 +11,6 @@ make sure to install the dependencies:
 # npm
 npm install
 
-## Development Server
-Start the development server on http://localhost:3000
-
-```bash
-npm run dev
-```
-
 ## Scripts
 - `build` Creates built files under dist folder.
 - `dev` Starts UI at http://localhost:5173 .
