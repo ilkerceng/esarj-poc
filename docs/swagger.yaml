@@ -94,13 +94,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Enums'
-
-  #       '400':
-  #         description: The specified user ID is invalid (not a number).
-  #       '404':
-  #         description: A user with the specified ID was not found.
-  #       default:
-  #         description: Unexpected error
 components:
   schemas:
     ApiResponse:

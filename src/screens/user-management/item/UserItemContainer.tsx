@@ -5,11 +5,11 @@ import {
   usePostUser,
 } from '../../../api/generated/esarj-api';
 import { ID } from '../../../lib/types';
-import { UserManagementItem } from './UserManagementItem';
+import { UserItem } from './UserItem';
 import { PostUserBodyType } from '../types';
 import { queryClient } from '../../../queryClient';
 
-export const UserManagementItemContainer = ({
+export const UserItemContainer = ({
   id,
   onClose,
   onSuccessUpdateUser, // mode,
@@ -38,11 +38,12 @@ export const UserManagementItemContainer = ({
 
   const onFinish = async (values: PostUserBodyType) => {
     const formatString = (str: string) => str?.replace(/\s+/g, ' ');
+
     postUser({
       data: {
         ...values,
         firstName: formatString(values.firstName),
-        lastName: formatString(values.firstName),
+        lastName: formatString(values.lastName),
       },
     });
   };
@@ -56,7 +57,7 @@ export const UserManagementItemContainer = ({
   };
 
   return (
-    <UserManagementItem
+    <UserItem
       id={id}
       onClose={handleClose}
       onFinish={onFinish}

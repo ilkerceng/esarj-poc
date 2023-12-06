@@ -1,15 +1,15 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { UserManagementItem } from './UserManagementItem';
+import { UserItem } from './UserItem';
 import { accountTypes, statuses } from '../../../lib/constants';
 import { getPostUserMock } from '../../../api/generated/esarj-api.msw';
 import { User } from '../../../api/generated/model';
 
 const meta = {
   title: 'screens/User Management / User Form',
-  component: UserManagementItem,
+  component: UserItem,
   tags: ['autodocs'],
   argTypes: {},
-} satisfies Meta<typeof UserManagementItem>;
+} satisfies Meta<typeof UserItem>;
 
 export default meta;
 

@@ -1,9 +1,10 @@
-// import { render } from '@testing-library/react';
 import { UserStatusBadge } from './UserStatusBadge';
 import renderer from 'react-test-renderer';
 import { Status } from '../../../../api/generated/model';
 
-test('renders correctly', () => {
+document.addEventListener('test', () => {});
+
+test('Renders UserStatusBadge correctly', () => {
   const tree = renderer
     .create(<UserStatusBadge status={Status.Active} />)
     .toJSON();

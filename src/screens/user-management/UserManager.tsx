@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useListUsers } from '../../api/generated/esarj-api';
 import { Search } from '../../components/search/Search';
 import { ID } from '../../lib/types';
-import { UserManagementItemContainer } from './item/UserManagementItemContainer';
+import { UserItemContainer } from './item/UserItemContainer';
 import { UserList } from './list/UserList';
 import { UserManagementView } from './views/UserManagementView';
 
@@ -54,7 +54,7 @@ export const UserManager = () => {
       }
       RecordDetailComponent={
         selectedUser !== undefined ? (
-          <UserManagementItemContainer
+          <UserItemContainer
             key={selectedUser}
             id={selectedUser}
             onSuccessUpdateUser={() => {

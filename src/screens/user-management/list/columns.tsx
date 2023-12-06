@@ -45,7 +45,7 @@ const AccountTypeColumn = ({ accountType }: { accountType: AccountType }) => {
   ) : null;
 };
 
-const UserIDColumn = ({ id }: { id: ID }) => <UserID id={id} />;
+const UserIDColumn = ({ id }: { id: ID }) => <UserID id={id?.toString()} />;
 
 export const columns: TableColumnsType<UserListItem> = [
   {

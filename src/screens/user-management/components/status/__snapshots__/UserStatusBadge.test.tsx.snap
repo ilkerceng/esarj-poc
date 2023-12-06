@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders correctly 1`] = `
+exports[`Renders UserStatusBadge correctly 1`] = `
 <span
   className="ant-badge ant-badge-status ant-badge-not-a-wrapper !mr-2 css-dev-only-do-not-override-2q8sxy"
   style={{}}

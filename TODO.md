@@ -14,4 +14,5 @@ Bonus
 use hooks and mapper for table
 solve id
 
-
+fix test form inside the tabs inside error
+  generate the scenario to prove the error cause is the inactive tabs

@@ -14,9 +14,11 @@ import {
   Row,
   Select,
   Skeleton,
-  Tabs,
+  Space,
+  Tabs
 } from 'antd';
 import { ValidateErrorEntity } from 'rc-field-form/es/interface';
+import InputMask from 'react-input-mask';
 
 import { useEffect, useMemo, useState } from 'react';
 import {
@@ -45,7 +47,17 @@ const contactTabFormNamesMap: Record<keyof PostUserBodyType, ActiveTabKey> = {
 
 const initialErrorTabState = {} as TabErrorStateType;
 
-export const UserManagementItem = ({
+const customizeRequiredMark = (
+  label: React.ReactNode,
+  { required }: { required: boolean },
+) => (
+  <Space>
+    {label}
+    {required ? <InfoCircleOutlined style={{ color: 'red' }} /> : null}
+  </Space>
+);
+
+export const UserItem = ({
   id,
   onClose,
   onFinish,
@@ -127,16 +139,10 @@ export const UserManagementItem = ({
     errorInfo: ValidateErrorEntity<PostUserBodyType>,
   ) => {
     const errorFieldNames = errorInfo.errorFields.map(
-      errorField => errorField.name[0],
+      (errorField: any) => errorField.name[0],
     );
     setErrorIndicator(errorFieldNames as string[]);
   };
-
-  if (isLoadingItem) {
-    return (
-      <Card loading={true} title={<Skeleton title active className="mt-4" />} />
-    );
-  }
 
   const onChangeTab = (activeKey: ActiveTabKey) => {
     setActiveTab(activeKey);
@@ -149,17 +155,19 @@ export const UserManagementItem = ({
     tabKey: ActiveTabKey;
     label: string;
   }) => {
-    return (
-      <span>
-        {label}
-        {errorTab[tabKey] && activeTab !== tabKey ? (
-          <InfoCircleOutlined style={{color: "red"}} />
-        ) : null}
-      </span>
-    );
+    return customizeRequiredMark(label, {
+      required: errorTab[tabKey] && activeTab !== tabKey,
+    });
   };
 
   const isFormEditable = formPermissionMode === FormPermissionMode.Edit;
+
+  //TODO: add unit test for the loading state
+  if (isLoadingItem) {
+    return (
+      <Card loading={true} title={<Skeleton title active className="mt-4" />} />
+    );
+  }
 
   return (
     <Card
@@ -186,7 +194,7 @@ export const UserManagementItem = ({
           {!isNewItem && userData ? (
             <>
               <span className="mr-2">
-                <UserID id={userData.id} />
+                <UserID id={userData.id?.toString()} />
               </span>
               {accountTypeModel ? (
                 <accountTypeModel.Icon className="mr-2" />
@@ -209,6 +217,7 @@ export const UserManagementItem = ({
         layout="vertical"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        requiredMark={customizeRequiredMark}
       >
         <Tabs
           activeKey={activeTab}
@@ -278,7 +287,13 @@ export const UserManagementItem = ({
                     <Form.Item
                       name="firstName"
                       label="First Name"
-                      rules={[{ required: true, min: 2 }]}
+                      rules={[
+                        { required: true, min: 2 },
+                        {
+                          pattern: new RegExp('^[A-Za-z /s]+$'),
+                          message: 'only alphabetic characters are accepted',
+                        },
+                      ]}
                     >
                       <Input />
                     </Form.Item>
@@ -319,7 +334,12 @@ export const UserManagementItem = ({
                       label="Mobile"
                       rules={[{ required: true }]}
                     >
-                      <Input />
+                      <InputMask
+                        mask="+\90 (999) 999 9999"
+                        // value={form.getFieldValue('phone')}
+                      >
+                        {(() => <Input />) as any}
+                      </InputMask>
                     </Form.Item>
                   </Col>
                   <Col span={12}>
