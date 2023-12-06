@@ -43,6 +43,12 @@ Locally preview production build:
 npm run preview
 ```
 
+## Note
+For the current status of the project, since all services are mocked, the mutations will not be reflected on UI. 
+For example When the new user is created, all the rules will apply but the new user will not be rendered on the List.
+To be able to see the changes reflected correctly; a real service should be integrated, Or it can be debugged using console.logs on callback functions. 
+
+
 ## Learn More
 The main technologies used to create this POC.
 - [Vite - Build Tool](https://vitejs.dev/)
