@@ -7,12 +7,13 @@
 Setup
 make sure to install the dependencies:
 ```bash
-
 # npm
 npm install
+```
 
 ## Scripts
 - `build` Creates built files under dist folder.
+- `preview` Locally preview production build:
 - `dev` Starts UI at http://localhost:5173 .
 - `sb` Starts storybook application used for component development at http://localhost:6006/.
 - `generate-api` Generates api layer under src/api/generated getting content from `docs/swagger.yaml`.
@@ -20,21 +21,6 @@ npm install
 
 ## .env 
 The settings on the .env file are used as variables during build.
-
-
-## Production
-
-Build the application for production:
-
-```bash
-npm run build
-```
-
-Locally preview production build:
-
-```bash
-npm run preview
-```
 
 ## Note
 For the current status of the project, since all services are mocked, the mutations will not be reflected on UI. 
